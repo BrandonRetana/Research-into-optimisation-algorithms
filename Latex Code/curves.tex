@@ -1,0 +1,89 @@
+\section{Introducción}
+
+El presente trabajo trata sobre la implementación en pytorch de los algoritmos \textit{Newton Rhapson, Descenso del Gradiente Adaptativo,} y \textit{Simulated Annealing.} La idea es implementar estos algortimos con distintas funciones matemáticas y estudiar su comportamiento y características; primeramente optimizando los hiperparámetros de cada función con la biblioteca de \textit{Optuna} para evaluar y comparar los resultados.
+
+\section{Optimización de funciones}
+
+A continuación se explorarán gráficamente una serie de funciones matemáticas con utilizando curvas de nivel, estas curvas nos permitirán examinar en detalle la topografía de las funciones, y a partir de ellas identificar posibles puntos silla, evaluar la convexidad de las superficies y localizar los puntos mínimos.
+
+\subsection{Funciones a Optimizar}
+
+Sean $f_0$, $f_1$ y $f_2$ las funciones a optimizar en este trabajo práctico, las cuáles se definen a continuación:
+
+\begin{itemize}
+    \item $f_0 : f_0(x,y) = x^2 + y^2$
+    \item $f_1 : f_1(x,y) = (1.5 - x +xy)^2 + (2.25 -x + xy^2)^2 + (2.625 - x +xy^3)^2$
+    \item $f_2 : f_2(x,y) = 0.26(x^2 + y^2) - 0.48xy$ \\
+    \\
+    con $x,y\in\left[-10,10\right]$.
+\end{itemize}
+
+
+\newpage
+
+\subsection{Análisis de la función $f_0$}
+\begin{figure}[h!]
+  \centering
+  \includesvg[width=\textwidth]{figures/CF0.svg}  
+  \caption{Curvas de nivel de la función $f_0$}
+  \captionsetup{justification=centering}
+  \label{fig:CF0}
+\end{figure}
+
+Cuando observamos las curvas representadas en la Figura \ref{fig:CF0} es evidente que esta \textbf{es una función cóncava, es decir no convexa,} debido a que sus curvas de nivel van tendiendo de los puntos más grandes a los puntos más pequeños dejándonos una sola zona en el centro, la cual podemos asumir como el \textbf{punto mínimo global de la función $p=\left[0,0\right]$}. Además, la gama de color representada a la derecha de la figura nos indica que cuando los puntos se acercan a 0 predomina la gama de color morado, lo que también es un indicativo de que esta función es convexa. De esta forma podemos concluir que \textbf{no se observan valles o puntos silla.}
+
+
+\newpage
+
+\subsection{Análisis de la función $f_1$}
+
+\begin{figure}[h!]
+  \centering
+  \includesvg[width=\textwidth]{figures/CF1.svg}  
+  \caption{Curvas de nivel de la función $f_1$}
+  \captionsetup{justification=centering}
+  \label{fig:CF1}
+\end{figure}
+
+Cuando observamos las curvas representadas en la Figura \ref{fig:CF1} no es tan evidente que esta \textbf{es una función cóncava, es decir no convexa,} pero si tomamos $p=\left[3, \frac{1}{2}\right]$ y lo evaluamos de la en la función, tenemos que $f_1(3, \frac{1}{2}) = 0$. Por lo que podemos asumir a este punto $p$ como el \textbf{mínimo global de la función.} Además, si observásemos la gráfica de toda la función podríamos notar que tiene forma de una hoja de papel estirada hacia arriba desde sus cuatro puntas, pero, manteniendo una planicie prolongada bajo cierto rango, siendo estos puntos \textbf{puntos silla.}
+
+\newpage
+\subsection{Análisis de la función $ f_2$}
+\begin{figure}[h!]
+  \centering
+  \includesvg[width=\textwidth]{figures/CF2.svg}  
+  \caption{Curvas de nivel de la función $f_2$}
+  \captionsetup{justification=centering}
+  \label{fig:CF2}
+\end{figure}
+
+
+Cuando analizamos las gráficas mostradas en la Figura \ref{fig:CF2}, es fácil notar que se trata de una \textbf{función cónica, es decir, no convexa.} Esto se debe a que las curvas de nivel tienden de los valores más altos a los más bajos, dejando una única región central que podemos interpretar como el mínimo global de la función en el punto $p=\left[0,0\right]$. Además, la paleta de colores representada en el lado derecho de la figura indica que a medida que los valores se acercan a 0, prevalece el tono morado, lo que también sugiere que la función es convexa en esa región. En resumen, no se observan valles ni puntos silla en esta representación.
+
+\newpage
+\subsection{Puntos iniciales}
+Para probar los distintos algoritmos se realizaron diez ejecuciones distintas, para cada ejecución se definió un punto inicial para las tres funciones. Se crearon puntos aleatorio con la función \textbf{\textit{torch.rand}} y el uso de la función \textbf{\textit{torch.manual\_seed}} para asegurarnos de que cada función a probar tenga el mismo punto inicial. A continuación una tabla con los diez puntos iniciales. \\
+
+\begin{table}[H]
+\begin{center}
+    \begin{tabular}{@{}clc@{}}
+    \toprule
+    \textbf{\begin{tabular}[c]{@{}c@{}}Número\\ de Iteración\end{tabular}} &
+      \multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Punto Inicial\\ {[}x, y{]}\end{tabular}}} &
+    \textbf{\begin{tabular}[c]{@{}c@{}}Semilla\\ utilizada\end{tabular}} \\ \midrule
+    \textbf{0} & \multicolumn{1}{c}{{[}4.9626, 7.6822{]}} & 0 \\
+    \textbf{1} & \multicolumn{1}{c}{{[}7.5763, 2.7931{]}} & 1 \\
+    \textbf{2} & \multicolumn{1}{c}{{[}6.1470, 3.8101{]}} & 2 \\
+    \textbf{3} & {[}0.0426, 1.0557{]}                     & 3 \\
+    \textbf{4} & {[}5.5964, 5.5909{]}                     & 4 \\
+    \textbf{5} & {[}8.3025, 1.2611{]}                     & 5 \\
+    \textbf{6} & {[}5.7220, 5.5388{]}                     & 6 \\
+    \textbf{7} & {[}5.3492, 1.9880{]}                     & 7 \\
+    \textbf{8} & {[}5.9793, 8.4530{]}                     & 8 \\
+    \textbf{9} & {[}6.5578, 3.0202{]}                     & 9 \\ \bottomrule
+    \end{tabular}
+\end{center}
+\caption{Puntos iniciales para cada ejecución de los algoritmos.}
+\label{tab:puntos-iniciales}
+\end{table}
+

@@ -1,0 +1,316 @@
+\section{Algoritmo Simulated Annealing}
+
+
+
+\subsection{Gráficas de calibración de Optuna}
+
+\subsubsection{Enfoque}
+Para el algoritmo de Simulated Annealing se realizó un proceso de calibración utilizando el framework optuna, en este caso se ha buscado obtener los mejores valores para los siguientes hiperparámetros:
+
+\begin{itemize}
+    \item $\alpha$: Representa el cambio en la temperatura en el algoritmo y controla la disminución gradual de la temperatura durante la búsqueda.
+    
+    \item $T_t$: Representa la temperatura inicial en el algoritmo, por lo que determina la probabilidad de aceptar soluciones subóptimas en las primeras etapas de la búsqueda.
+    
+    \item $h$: Representa el valor que determina el tamaño del espacio de búsqueda y se calcula aplicando la siguiente fórmula:
+
+    \[
+        \left[ \vec{X}_t - h, \vec{X}_t + h \right]
+    \]
+
+
+\end{itemize}
+
+\subsubsection{Mejores hiperparámetros}
+
+Una vez finalizado el proceso de calibración de hiperparámetros se han obtenido los valores que se presentan en la siguiente tabla:
+
+\begin{table}[H]
+    \centering
+    \caption{Valores de $\alpha$ para las funciones}
+    \begin{tabular}{|c|c|c|}
+    \hline
+    \textbf{Función} & \textbf{Intervalo de $\alpha$} \\
+    \hline
+    $f_0$ & $\alpha = 0.8599468781832491$ \\
+    \hline
+    $f_1$ & $\alpha = 0.8712508926417811$ \\
+    \hline
+    $f_2$ & $\alpha = 0.8500076641449615$ \\
+    \hline
+    \end{tabular}
+    \label{tab:valores-alpha-simul_f0}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \caption{Valores de $T_t$ inicial para las funciones}
+    \begin{tabular}{|c|c|c|}
+    \hline
+    \textbf{Función} & \textbf{Intervalo de $\alpha$} \\
+    \hline
+    $f_0$ & $T_t = 2.2735197480829803$ \\
+    \hline
+    $f_1$ & $T_t = 1.1046845878590525$ \\
+    \hline
+    $f_2$ & $T_t = 6.283942569628704$ \\
+    \hline
+    \end{tabular}
+    \label{tab:valores-alpha-simul_f1}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \caption{Valores de $h$ para las funciones}
+    \begin{tabular}{|c|c|c|}
+    \hline
+    \textbf{Función} & \textbf{Intervalo de $\alpha$} \\
+    \hline
+    $f_0$ & $h = 2.544484099970395$ \\
+    \hline
+    $f_1$ & $h = 3.632011640203967$ \\
+    \hline
+    $f_2$ & $h = 3.1829746414563966$ \\
+    \hline
+    \end{tabular}
+    \label{tab:valores-alpha-simul_f2}
+\end{table}
+
+Los valores presentados en las tablas anteriores han sido generados por Optuna, basándose en los resultados obtenidos al evaluar el comportamiento del algoritmo simulated annealing con diferentes combinaciones de parametros. A continuación, se presenta el comportamiento de las funciones de aprendizaje con 3 iteraciones respaldas con su grafica de aprendizaje.
+Para comprender de mejor las iteraciones es importante considerar el siguiendo el patrón:
+
+\begin{itemize}
+\item a: Mejor Iteración lograda
+\item b: Iteración comparativa intermedia
+\item c: Peor Iteración completada
+\end{itemize}
+
+\begin{figure}[h!]
+     \centering
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includesvg[width=\textwidth]{figures/Simul/learningCurves/curva_aprendizaje_f0_i43.svg}
+         \caption{Iteración 43}
+         \label{fig:learning-Simulated-Annealing-f0-72}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includesvg[width=\textwidth]{figures/Simul/learningCurves/curva_aprendizaje_f0_i66.svg}
+         \caption{Iteración 66}
+         \label{fig:learning-Simulated-Annealing-f0-9}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includesvg[width=\textwidth]{figures/Simul/learningCurves/curva_aprendizaje_f0_i6.svg}
+         \caption{Iteración 6}
+         \label{fig:learning-vanilla-f0-7}
+     \end{subfigure}
+        \caption{Curvas de aprendizaje en la función $f_0$ con Simulated Annealing}
+        \label{fig:learning-curves-f0}
+\end{figure}
+
+En la figura anterior se puede observar el comportamiento del algoritmo con la función $f_0$ en tres iteraciones distintas con la siguiente combinación de parámetros:   
+
+\begin{table}[H]
+    \centering
+    \caption{Hiperparámetros en gráficas para $f_0$}
+    \begin{tabular}{|c|c|c|c|}
+    \hline
+    \textbf{Subfigura} & \textbf{$\alpha$} & \textbf{$T_t$} & \textbf{$h$}\\
+    \hline
+    a & 0.919776318717975 & 1.262224408290402 & 2.5447376535344564\\
+    \hline
+    b & 0.9106894926527385 & 1.9676680426140905 & 3.390261479713804 \\
+    \hline
+    c & 0.9516696799464767 & 3.0933712848473984 & 1.0537125576587942 \\
+    \hline
+    \end{tabular}
+    \label{tab:hiper_simul_f0}
+\end{table}
+
+Se puede observar que los valores que más cambian al comparar la mejor iteración con la peor son la temperatura inicial y el criterio del espacio de búsqueda, se nota una convergencia más rápida y un mayor acercamiento en las funciones a y b en contraste con el comportamiento de la iteración c.
+
+\begin{figure}[h!]
+     \centering
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includesvg[width=\textwidth]{figures/Simul/learningCurves/curva_aprendizaje_f1_i73.svg}
+         \caption{Iteración 73}
+         \label{fig:learning-Simulated-Annealing-f0-72}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includesvg[width=\textwidth]{figures/Simul/learningCurves/curva_aprendizaje_f1_i15.svg}
+         \caption{Iteración 15}
+         \label{fig:learning-Simulated-Annealing-f0-}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includesvg[width=\textwidth]{figures/Simul/learningCurves/curva_aprendizaje_f1_i11.svg}
+         \caption{Iteración 11}
+         \label{fig:learning-vanilla-f0-7}
+     \end{subfigure}
+        \caption{Curvas de aprendizaje en la función $f_1$ con Simulated Annealing}
+        \label{fig:learning-curves-f0}
+\end{figure}
+
+La figura anterior muestra el comportamiento del algoritmo con la función $f_1$ en tres iteraciones distintas con la siguiente combinación de parámetros:  
+
+
+\begin{table}[H]
+    \centering
+    \caption{Hiperparámetros en gráficas para $f_1$}
+    \begin{tabular}{|c|c|c|c|}
+    \hline
+    \textbf{Subfigura} & \textbf{$\alpha$} & \textbf{$T_t$} & \textbf{$h$}\\
+    \hline
+    a &  0.9115918489368464 & 0.9115918489368464 & 5.123975289039711\\
+    \hline
+    b & 0.8500389537922496 & 4.708755060275312 & 2.8952818221213925 \\
+    \hline
+    c & 0.9547335226710361 & 1.0323097514199002 & 2.825825818870995 \\
+    \hline
+    \end{tabular}
+    \label{tab:hiper_simul_f1}
+\end{table}
+
+La información que se puede observar de las gráficas anteriores demuestran que el cambio más significativo de la mejor iteración con respecto a las otras dos es la elección de un h mayor para poder tomar un nuevo punto aleatorio en un espacio más amplio.
+
+\begin{figure}[h!]
+     \centering
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includesvg[width=\textwidth]{figures/Simul/learningCurves/curva_aprendizaje_f2_i47.svg}
+         \caption{Iteración 47}
+         \label{fig:learning-Simulated-Annealing-f0-72}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includesvg[width=\textwidth]{figures/Simul/learningCurves/curva_aprendizaje_f2_i26.svg}
+         \caption{Iteración 26}
+         \label{fig:learning-Simulated-Annealing-f0-9}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includesvg[width=\textwidth]{figures/Simul/learningCurves/curva_aprendizaje_f2_i0.svg}
+         \caption{Iteración 0}
+         \label{fig:learning-vanilla-f0-7}
+     \end{subfigure}
+        \caption{Curvas de aprendizaje en la función $f_2$ con Simulated Annealing}
+        \label{fig:learning-curves-f0}
+\end{figure}
+
+Las tres graficas anteriores han sido obtenidas con la siguiente combinación de hiperparámetros.
+
+\begin{table}[H]
+    \centering
+    \caption{Hiperparámetros en gráficas para $f_2$}
+    \begin{tabular}{|c|c|c|c|}
+    \hline
+    \textbf{Subfigura} & \textbf{$\alpha$} & \textbf{$T_t$} & \textbf{$h$}\\
+    \hline
+    a &  0.8979283590288949 & 1.2741889304493768 & 3.1579854125837747\\
+    \hline
+    b & 0.90490702875916 & 1.5989435605575526 & 3.0171093365838533 \\
+    \hline
+    c & 0.9587569062050809 & 4.240369398551003 & 1.7408651680274425 \\
+    \hline
+    \end{tabular}
+    \label{tab:hiper_simul_f2}
+\end{table}
+
+Es notable que la diferencia más marcada en los datos de la tabla anterior es la elección del valor $\alpha$ para determinar la disminución de temperatura, vemos que un valor alto influyó negativamente en la gráfica c dando por resultado la peor iteración del algoritmo aplicado a esta función, los resultados de la tabla anterior pueden ser consultados en la siguiente tabla.
+
+
+
+\newpage
+\subsection{Resultados obtenidos}
+
+Haciendo uso de los hiperparámetros la sección 5.1 y los puntos utilizados con los algortimos anteriores se ejecutará Simulated Annealing 10 veces para cada una de las funciones. \\
+
+
+\begin{table}[h]
+\begin{tabular}{@{}ccccc@{}}
+\toprule
+\textbf{$f_i$} &
+  \textbf{\begin{tabular}[c]{@{}c@{}}Número\\ Iteración\end{tabular}} &
+  \textbf{\begin{tabular}[c]{@{}c@{}}Pasos en\\ converger\end{tabular}} &
+  \textbf{Punto de Convergencia} &
+  \textbf{\begin{tabular}[c]{@{}c@{}}Valor\\ Óptimo\end{tabular}} \\ \midrule
+\textbf{$f_0$} & 5 & 21 & {[}0.1601684093475, -0.1697366237640{]} & 0.054464 \\
+\textbf{$f_1$} & 3 & 18 & {[}2.4034957885742, 0.2915222644805{]}  & 0.122704 \\
+\textbf{$f_2$} & 4 & 22 & {[}0.8171668052673, 1.0316667556762{]}  & 0.045684 \\ \bottomrule
+\end{tabular}
+\caption{Resultados obtenidos de 10 iteraciones del algoritmo.}
+\label{tab:resultados-simul}
+\end{table}
+
+Posteriormente se analiza de la muestra de las diez ejecuciones el promedio de los valores óptimos, así como la cantidad promedio de pasos que dura cada algoritmo en converger. La siguiente tabla muestra los datos obtenidos: \\
+
+\begin{table}[h]
+\begin{center}
+    \begin{tabular}{@{}ccc@{}}
+    \toprule
+    \textbf{$f_i$} & \textbf{\begin{tabular}[c]{@{}c@{}}Óptimo\\ Promedio\end{tabular}} &    \textbf{\begin{tabular}[c]{@{}c@{}}Pasos en\\ Promedio\end{tabular}} \\ \midrule
+    \textbf{$f_0$} & 15.972546     & 16.4 \\
+    \textbf{$f_1$} & 211083.468055 & 19.3 \\
+    \textbf{$f_2$} & 1.597155      & 17.1 \\ \bottomrule
+    \end{tabular}
+\end{center}
+\caption{Valor óptimo promedio y cantidad promedio de pasos.}
+\label{tab:valores-promedio-simul}
+\end{table}
+
+\newpage
+\subsection{Puntos Visitados}
+A continuación se muestran los puntos visitados en las mejores iteraciones del algoritmo Simulated annealing para las funciones $f_0$, $f_1$, y $f_2$. \\
+
+\begin{figure}[h!]
+     \centering
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includesvg[width=\textwidth]{figures/Simul/curvas_simul_f0.svg}
+         \caption{Iteración 24}
+         \label{fig:curvas-simul-f0}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includesvg[width=\textwidth]{figures/Simul/curvas_simul_f1.svg}
+         \caption{Iteración 29}
+         \label{fig:curvas-simul-f1}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includesvg[width=\textwidth]{figures/Simul/curvas_simul_f2.svg}
+         \caption{Iteración 52}
+         \label{fig:curvas-simul-f2}
+     \end{subfigure}
+        \caption{Curvas de nivel con los puntos visitados en $f_0$, $f_1$, $f_2$.}
+        \label{fig:curvas-simul}
+\end{figure}
+
+
+\subsection{Simulated annealing y descenso del gradiente}
+
+El algoritmo de descenso de gradiente es uno de los métodos más utilizados para identificar valores óptimos. Sin embargo, es susceptible de quedar atrapado en mínimos locales o puntos de silla, especialmente cuando se trata de problemas de optimización no convexos multidimensionales.
+
+Por otro lado, el algoritmo de simulated annealing es capaz de explorar el espacio de búsqueda de manera más efectiva, evitando quedar atrapado en estos puntos conflictivos gracias a su componente probabilístico, que permite seleccionar otro punto en función de una probabilidad que disminuye con el tiempo. 
+
+Al combinar el rápido recorrido del descenso de gradiente, con la capacidad probabilística de simulated annealing es posible obtener un algoritmo que converja rápidamente y evite quedar atrapado en puntos no deseados, tal y como es propuesto en el artículo de 
+\citeA{cai2021sa}.
+%\textit{Cai, Z. (2021). Sa-gd: Improved gradient descent %learning strategy with simulated annealing.} 
+
+
+Donde se describe la implementación de un algoritmo denominado SA-GD (descenso de gradiente mejorado por recocido simulado) que agrega un componente probabilístico al algoritmo de descenso de gradiente, similar al usado en simulated annealing, de esta manera es probable que el algoritmo salga de un punto indeseado y converja con mayor seguridad.
+
+
+
+

@@ -1,0 +1,606 @@
+\section{Algoritmo Descenso Del Gradiente}
+
+\subsection{Gráficas de calibración de Optuna}
+Para llevar a cabo la calibración de los hiperparámetros del algoritmo de descenso de gradiente en su forma más simple y del descenso de gradiente adaptativo, hemos implementado un estudio utilizando el framework Optuna. En este estudio, evaluamos una variedad de valores de $\alpha$ para el caso del descenso de gradiente y $\rho$ para el descenso de gradiente adaptativo, en los intervalos respectivos. Para las funciones $f_0$ y $f_2$, exploramos valores en el rango de $0 < \alpha < 5$. Sin embargo, en el caso de la función $f_1$, el intervalo de prueba para $\alpha$ se limita a $1 \times 10^{-10} < \alpha < 1 \times 10^{-5}$.
+
+
+El proceso de calibración de hiperparámetros busca determinar el valor óptimo de $\alpha$ que permitirá al algoritmo de descenso de gradiente converger eficazmente en cada una de las funciones $f_0$, $f_1$ y $f_2$, teniendo en cuenta los rangos de valores específicos para $\alpha$ en cada caso.
+
+Este enfoque permitirá encontrar una configuración óptima de $\alpha$ para cada función, optimizando así el rendimiento del algoritmo de descenso de gradiente en sus respectivos contextos.
+\subsubsection{Vanilla}
+Para el proceso de optimización del descenso del gradiente en su forma más simple, se determinó que los mejores óptimos obtenidos mediante Optuna para las funciones son los siguientes:
+
+\begin{table}[H]
+    \centering
+    \caption{Valores de $\alpha$ para las funciones}
+    \begin{tabular}{|c|c|c|}
+    \hline
+    \textbf{Función} & \textbf{Valor de $\alpha$} \\
+    \hline
+    $f_0$ & $\alpha = 0.5230717528153774$ \\
+    \hline
+    $f_1$ & $\alpha = 1 \times 9.999662286540719^{-06}$ \\
+    \hline
+    $f_2$ & $\alpha = 1.8448262935515587$ \\
+    \hline
+    \end{tabular}
+    \label{tab:valores-alpha-vanilla}
+\end{table}
+
+Para obtener los valores presentados en la Tabla \ref{tab:valores-alpha-vanilla}, Optuna evaluó diversos valores de $\alpha$ dentro de los intervalos correspondientes. A través de la visualización de las curvas de aprendizaje de estos valores, podemos comprender cómo las funciones se optimizan a medida que se ajustan los hiperparámetros. A continuación se muestran algunos ejemplos de hiperparámetros probados por optuna:
+\clearpage
+\begin{table}[H]
+    \centering
+    \caption{Valores de $\alpha$ para las iteraciones}
+    \begin{tabular}{|c|c|c|}
+    \hline
+    \textbf{Subfigura} & \textbf{Valor de $\alpha$} \\
+    \hline
+    $a$ & $\alpha = 0.4979299368215893$ \\
+    \hline
+    $b$ & $\alpha =  1.1911687750193$ \\
+    \hline
+    $c$ & $\alpha = 0.7868757807170943$ \\
+    \hline
+    \end{tabular}
+    \label{tab:valores-alpha-vanilla-iter}
+\end{table}
+
+\begin{figure}[h!]
+     \centering
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includesvg[width=\textwidth]{figures/Vanilla/learningCurves/curva_aprendizaje_f0_i24.svg}
+         \caption{Iteración 24}
+         \label{fig:learning-vanilla-f0-24}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includesvg[width=\textwidth]{figures/Vanilla/learningCurves/curva_aprendizaje_f0_i29.svg}
+         \caption{Iteración 29}
+         \label{fig:learning-vanilla-f0-29}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includesvg[width=\textwidth]{figures/Vanilla/learningCurves/curva_aprendizaje_f0_i52.svg}
+         \caption{Iteración 52}
+         \label{fig:learning-vanilla-f0-52}
+     \end{subfigure}
+        \caption{Curvas de aprendizaje en la función $f_0$ con el descenso del gradiente}
+        \label{fig:learning-curves-f0}
+\end{figure}
+Al analizar estas curvas de aprendizaje, podemos observar algunas características interesantes. En particular, destacamos la velocidad de convergencia de cada una de ellas. En la figura correspondiente a la iteración 24 (consulte la figura \ref{fig:learning-vanilla-f0-24}), notamos un comportamiento suave y continuo a medida que la curva desciende. Sin embargo, en el gráfico de la iteración 52 (véase la figura \ref{fig:learning-vanilla-f0-52}), observamos un comportamiento más bien lineal, caracterizado por una tendencia recta en la curva.
+
+Es importante señalar que en estas iteraciones, la que más se acerca al óptimo es la iteración 29 (consulte la figura \ref{fig:learning-vanilla-f0-29}). Esto se debe a un cambio abrupto en la curva, lo que resulta en un salto significativo hacia una mejora del rendimiento del algoritmo, pero aunque esta sea la que más se acerca, no es la mejor, a continuación se presentara la gráfica de la mejor iteración con el $\alpha$ mostrado en la Tabla \ref{tab:valores-alpha-vanilla}.
+
+\clearpage
+
+\begin{figure}[h!]
+  \centering
+  \includesvg[width=\textwidth]{figures/Vanilla/learningCurves/curva_aprendizaje_f0_i18.svg}  
+  \caption{Curva de aprendizaje $f_0$ (Iteración 18)}
+  \captionsetup{justification=centering}
+  \label{fig:learning-vanilla-f0-18}
+\end{figure}
+
+Como se puede apreciar en la figura \ref{fig:learning-vanilla-f0-18}, esta se destaca como la más sobresaliente de todas. La razón principal es el cambio drástico en su curva durante las primeras iteraciones, logrando acercarse al óptimo de manera casi instantánea. Estos indicios sugieren que los hiperparámetros asociados con esta iteración son los más adecuados encontrados por Optuna.
+
+Este fenómeno es particularmente significativo, ya que no solo refleja la eficiencia de los hiperparámetros en la convergencia hacia una solución óptima, sino que también sugiere un posible camino hacia la aceleración del proceso de optimización.
+
+\newpage
+
+Para el proceso de nuestra segunda función $f_1$ tenemos las siguientes curvas de nivel:
+\begin{table}[H]
+    \centering
+    \caption{Valores de $\alpha$ para las iteraciones}
+    \begin{tabular}{|c|c|c|}
+    \hline
+    \textbf{Subfigura} & \textbf{Valor de $\alpha$} \\
+    \hline
+    $a$ & $\alpha = 1 \times 9.390504659542572^{-06}$ \\
+    \hline
+    $b$ & $\alpha = 1 \times 8.204671591215201^{-06} $ \\
+    \hline
+    $c$ & $\alpha = 1 \times 9.660747066249346^{-06}$ \\
+    \hline
+    \end{tabular}
+    \label{tab:valores-alpha-vanilla}
+\end{table}
+
+\begin{figure}[h!]
+     \centering
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includesvg[width=\textwidth]{figures/Vanilla/learningCurves/curva_aprendizaje_f1_i40.svg}
+         \caption{Iteración 40}
+         \label{fig:learning-vanilla-f1-40}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includesvg[width=\textwidth]{figures/Vanilla/learningCurves/curva_aprendizaje_f1_i49.svg}
+         \caption{Iteración 49}
+         \label{fig:learning-vanilla-f1-49}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includesvg[width=\textwidth]{figures/Vanilla/learningCurves/curva_aprendizaje_f1_i88.svg}
+         \caption{Iteración 88}
+         \label{fig:learning-vanilla-f1-88}
+     \end{subfigure}
+        \caption{Curvas de aprendizaje en la función $f_1$ con el descenso del gradiente}
+        \label{fig:learning-curves-f1}
+\end{figure}
+
+Como se logra observar en las curvas de nivel mostradas en la figura \ref{fig:learning-curves-f1}, todas las curvas mantienen un comportamiento similar a lo largo de las iteraciones de optimización. Se caracterizan por una tendencia descendente que se asemeja a una línea recta a medida que avanzan las iteraciones.
+
+Este comportamiento constante en las curvas de aprendizaje de las iteraciones sugiere que, en este contexto específico, los hiperparámetros probados pueden no estar optimizados de manera eficiente. Aunque las curvas muestran una disminución constante, el ritmo de mejora es limitado y lento en comparación con otros conjuntos de hiperparámetros. Este tipo de comportamiento lineal puede indicar que se necesita una exploración aún más exhaustiva de las configuraciones de hiperparámetros.
+
+El comportamiento visto en la figura \ref{fig:learning-curves-f1} se replica en su 
+mejor iteración, la cual se muestra a continuación:
+
+\begin{figure}[h!]
+  \centering
+  \includesvg[width=\textwidth]{figures/Vanilla/learningCurves/curva_aprendizaje_f1_i99.svg}  
+  \caption{Curva de aprendizaje $f_1$ (Iteración 99)}
+  \captionsetup{justification=centering}
+  \label{fig:learning-vanilla-f1-99}
+\end{figure}
+
+Al examinar detenidamente esta gráfica, podemos identificar un patrón de comportamiento lineal que se replica, al igual que en las gráficas anteriores de la figura \ref{fig:learning-curves-f1}. Sin embargo, se destaca una distinción notable: en el eje y, que representa la pérdida del modelo, notamos que alcanza un valor ligeramente menor en comparación con las otras curvas de aprendizaje.
+
+Este descenso de la pérdida es modesto y sugiere que es probable que se requieran más iteraciones del algoritmo de descenso de gradiente para alcanzar un óptimo en este caso específico. El avance hacia la convergencia es notoriamente más lento en esta función en particular.
+\clearpage
+Para el proceso de nuestra segunda función $f_2$ tenemos las siguientes curvas de nivel:
+\begin{table}[H]
+    \centering
+    \caption{Valores de $\alpha$ para las iteraciones}
+    \begin{tabular}{|c|c|c|}
+    \hline
+    \textbf{Subfigura} & \textbf{Valor de $\alpha$} \\
+    \hline
+    $a$ & $\alpha = 1.9367574545044346 $ \\
+    \hline
+    $b$ & $\alpha = 1.474658435940447 $ \\
+    \hline
+    $c$ & $\alpha = 1.821983238229652 $ \\
+    \hline
+    \end{tabular}
+    \label{tab:valores-alpha-vanilla}
+\end{table}
+
+
+\begin{figure}[h!]
+     \centering
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includesvg[width=\textwidth]{figures/Vanilla/learningCurves/curva_aprendizaje_f2_i22.svg}
+         \caption{Iteración 22}
+         \label{fig:learning-vanilla-f2-22}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includesvg[width=\textwidth]{figures/Vanilla/learningCurves/curva_aprendizaje_f2_i10.svg}
+         \caption{Iteración 10}
+         \label{fig:learning-vanilla-f2-10}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includesvg[width=\textwidth]{figures/Vanilla/learningCurves/curva_aprendizaje_f2_i81.svg}
+         \caption{Iteración 81}
+         \label{fig:learning-vanilla-f2-81}
+     \end{subfigure}
+        \caption{Curvas de aprendizaje en la función $f_2$ con el descenso del gradiente}
+        \label{fig:learning-curves-f2}
+\end{figure}
+
+Al analizar detenidamente las gráficas presentadas en la figura \ref{fig:learning-curves-f2}, observamos una diversidad de comportamientos en función del valor de $\alpha$ utilizado. En particular, podemos notar el comportamiento de la gráfica en la figura \ref{fig:learning-vanilla-f2-22}, donde, en lugar de disminuir para converger hacia el óptimo, la pérdida aumenta. Este comportamiento indica que el valor de $\alpha$ elegido en esta iteración particular es inadecuado y no conduce a la mejora del rendimiento del algoritmo.
+
+Por otro lado, las gráficas en las figuras \ref{fig:learning-vanilla-f2-10} y \ref{fig:learning-vanilla-f2-22} muestran comportamientos más habituales, con una tendencia a la disminución de la pérdida a medida que avanzan las iteraciones. Sin embargo, incluso en estos casos, existen oportunidades de mejora para lograr una convergencia más eficiente y rápida hacia el óptimo.
+
+\begin{figure}[h!]
+  \centering
+  \includesvg[width=\textwidth]{figures/Vanilla/learningCurves/curva_aprendizaje_f2_i71.svg}  
+  \caption{Curva de aprendizaje $f_2$ (Iteración 71)}
+  \captionsetup{justification=centering}
+  \label{fig:learning-vanilla-f2-71}
+\end{figure}
+
+Pronunciado como el que observamos en la figura \ref{fig:learning-vanilla-f0-18} de la primera función. A pesar de la curvatura, esta curva de aprendizaje nos permite converger gradualmente hacia un valor óptimo.
+
+La diferencia en la forma de estas curvas de aprendizaje entre las funciones resalta la influencia de los hiperparámetros y la naturaleza de las funciones mismas. Mientras que en la primera función observamos una convergencia más abrupta, en la segunda función, la optimización requiere un enfoque más gradual. Esto sugiere que el rendimiento y la eficiencia de la optimización varían según la función y la configuración de hiperparámetros.
+\newpage
+
+\subsubsection{Adagrad}
+Al realizar la optimización con optuna de para el hiperparámetro $\rho$ para el descenso del gradiente adaptativo obtuvimos los siguientes valores óptimos para cada una de las funciones: 
+\begin{table}[H]
+    \centering
+    \caption{Valores de $\rho$ para las funciones}
+    \begin{tabular}{|c|c|c|}
+    \hline
+    \textbf{Función} & \textbf{Valor de $\rho$} \\
+    \hline
+    $f_0$ & $\rho = 0.004982589525009401$ \\
+    \hline
+    $f_1$ & $\rho = 1 \times 4.345609289818026e^{-7}$ \\
+    \hline
+    $f_2$ & $\rho =  0.009793979523676201$ \\
+    \hline
+    \end{tabular}
+    \label{tab:valores-rho-adaptativo}
+\end{table}
+
+Para obtener los datos que figuran en la Tabla \ref{tab:valores-rho-adaptativo}, Optuna examinó una variedad de valores para el parámetro $\rho$ dentro de los intervalos específicos. Mediante la observación de las curvas de aprendizaje generadas para estos valores, podemos adquirir una comprensión más profunda de cómo las funciones se optimizan a medida que se ajustan los hiperparámetros. A continuación, se presentan ejemplos de algunos de los hiperparámetros que fueron evaluados por Optuna:
+\clearpage
+\begin{table}[H]
+    \centering
+    \caption{Valores de $\rho$ para las iteraciones}
+    \begin{tabular}{|c|c|c|}
+    \hline
+    \textbf{Subfigura} & \textbf{Valor de $\rho$} \\
+    \hline
+    $a$ & $\rho = 2.556340257793353 $ \\
+    \hline
+    $b$ & $\rho = 0.07249812946454744 $ \\
+    \hline
+    $c$ & $\rho =  1.0472297964272534$ \\
+    \hline
+    \end{tabular}
+    \label{tab:valores-rho-adaptativo}
+\end{table}
+
+\begin{figure}[h!]
+     \centering
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includesvg[width=\textwidth]{figures/Adagrad/learningCurves/curva_aprendizaje_f0_i14.svg}
+         \caption{Iteración 14}
+         \label{fig:learning-adagrad-f0-14}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includesvg[width=\textwidth]{figures/Adagrad/learningCurves/curva_aprendizaje_f0_i32.svg}
+         \caption{Iteración 32}
+         \label{fig:learning-adagrad-f0-32}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includesvg[width=\textwidth]{figures/Adagrad/learningCurves/curva_aprendizaje_f0_i80.svg}
+         \caption{Iteración 80}
+         \label{fig:learning-adagrad-f0-80}
+     \end{subfigure}
+        \caption{Curvas de aprendizaje en la función $f_0$ con el descenso del gradiente adaptativo}
+        \label{fig:learning-curves-adagrad-f0}
+\end{figure}
+
+Las gráficas representadas en la figura \ref{fig:learning-curves-adagrad-f0} ofrecen una perspicaz representación de cómo se comporta el algoritmo del descenso de gradiente. Al examinar estas curvas, podemos identificar un patrón interesante: inicialmente, la pérdida aumenta de manera exponencial, lo que indica una búsqueda exploratoria en el espacio de los parámetros. Sin embargo, esta fase de crecimiento se detiene de manera abrupta y el algoritmo comienza a retroceder, ajustándose en busca de una solución óptima.
+
+Este fenómeno puede interpretarse como una adaptación del algoritmo para evitar caer en mínimos locales y permitir una exploración más eficaz del espacio de búsqueda. La transición desde un crecimiento exponencial a un descenso sugiere una estrategia que equilibra la exploración inicial con la explotación de regiones que muestran un potencial de mejora.
+
+\begin{figure}[h]
+  \centering
+  \includesvg[width=\textwidth]{figures/Adagrad/learningCurves/curva_aprendizaje_f0_i91.svg}  
+  \caption{Curva de aprendizaje $f_0$ (Iteración 91)}
+  \captionsetup{justification=centering}
+  \label{fig:learning-adagrad-f0-91}
+\end{figure}
+
+La figura \ref{fig:learning-adagrad-f0-91} nos brinda una visión del óptimo más destacado. Al observar detenidamente esta gráfica, se distingue un ángulo muy cerrado en su curva de aprendizaje. Este ángulo estrecho indica que el algoritmo ha alcanzado un nivel de convergencia muy eficiente y se encuentra cerca de una solución óptima. Esto es altamente indicativo de un rendimiento sobresaliente.
+
+En comparación con los resultados presentados en la Tabla \ref{tab:valores-rho-adaptativo}, esta gráfica en particular se destaca como una representación gráfica de un valor de hiperparámetro altamente efectivo. El ángulo cerrado en la curva de aprendizaje sugiere que el algoritmo ha encontrado una solución con una pérdida extremadamente baja y que la convergencia hacia el óptimo es excepcionalmente rápida.
+\newpage
+
+\begin{table}[H]
+    \centering
+    \caption{Valores de $\rho$ para las iteraciones}
+    \begin{tabular}{|c|c|c|}
+    \hline
+    \textbf{Subfigura} & \textbf{Valor de $\rho$} \\
+    \hline
+    $a$ & $\rho = 1 \times 7.85656931140569^{-6} $ \\
+    \hline 
+    $b$ & $\rho = 1 \times 6.851981801127774^{-07} $ \\
+    \hline
+    $c$ & $\rho =  1 \times 8.034794240056727^{-06} $ \\
+    \hline
+    \end{tabular}
+    \label{tab:valores-rho-adaptativo-f1}
+\end{table}
+
+\begin{figure}[h!]
+     \centering
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includesvg[width=\textwidth]{figures/Adagrad/learningCurves/curva_aprendizaje_f1_i9.svg}
+         \caption{Iteración 9}
+         \label{fig:learning-adagrad-f1-9}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includesvg[width=\textwidth]{figures/Adagrad/learningCurves/curva_aprendizaje_f1_i15.svg}
+         \caption{Iteración 15}
+         \label{fig:learning-adagrad-f1-15}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includesvg[width=\textwidth]{figures/Adagrad/learningCurves/curva_aprendizaje_f1_i30.svg}
+         \caption{Iteración 30}
+         \label{fig:learning-adagrad-f1-30}
+     \end{subfigure}
+        \caption{Curvas de aprendizaje en la función $f_0$ con el descenso del gradiente adaptativo}
+        \label{fig:learning-curves-adagrad-f1}
+\end{figure}
+
+La figura \ref{fig:learning-curves-adagrad-f1} nos presenta un comportamiento peculiar que se correlaciona con los valores proporcionados en la Tabla \ref{tab:valores-rho-adaptativo-f1}. Al examinar detenidamente esta gráfica de aprendizaje, notamos un patrón inusual en la curva de pérdida. Este patrón inusual sugiere que los valores de los hiperparámetros, como se detallan en la Tabla \ref{tab:valores-rho-adaptativo-f1}, están generando un comportamiento atípico en el proceso de optimización, además este comportamiento se repite a lo largo de todas las pruebas hechas con optuna, excepto en algunos casos puntuales. 
+
+En lugar de converger hacia un mínimo óptimo, la curva de pérdida tiende a crecer de manera continua a medida que avanzan las iteraciones. Este comportamiento inusual, en el que los valores tienden hacia el infinito, indica una dificultad en la convergencia del algoritmo. Es probable que los valores de hiperparámetros elegidos no sean adecuados para esta función específica, lo que resulta en un rendimiento subóptimo.
+
+Después de llevar a cabo las 100 iteraciones con Optuna para esta función, el hiperparámetro óptimo produce la siguiente curva de aprendizaje:
+
+\begin{figure}[h]
+  \centering
+  \includesvg[width=\textwidth]{figures/Adagrad/learningCurves/curva_aprendizaje_f1_i12.svg}  
+  \caption{Curva de aprendizaje $f_1$ (Iteración 12)}
+  \captionsetup{justification=centering}
+  \label{fig:learning-adagrad-f1-12}
+\end{figure}
+
+La curva de aprendizaje que se puede observar en la imagen \ref{fig:learning-adagrad-f1-12} ofrece un comportamiento interesante. Aunque no alcanza un estado de perfección, presenta una característica notable: se mantiene estable en un punto específico a medida que avanzan las iteraciones. Esto significa que, a pesar de que la pérdida no disminuye de manera continua, alcanza un equilibrio y se estabiliza en un valor constante.
+
+Este comportamiento puede ser interpretado como un signo de que el algoritmo ha alcanzado un valle en su proceso de optimización. Aunque no llega a un óptimo absoluto, la estabilidad en un punto fijo sugiere que ha encontrado una solución aceptable y que no experimenta fluctuaciones significativas en la pérdida.
+
+
+\begin{table}[H]
+    \centering
+    \caption{Valores de $\rho$ para las iteraciones}
+    \begin{tabular}{|c|c|c|}
+    \hline
+    \textbf{Subfigura} & \textbf{Valor de $\rho$} \\
+    \hline
+    $a$ & $\rho = 3.1717199733860775 $ \\
+    \hline 
+    $b$ & $\rho = 0.9037899321680318 $ \\
+    \hline
+    $c$ & $\rho =  0.009793979523676201 $ \\
+    \hline
+    \end{tabular}
+    \label{tab:valores-rho-adaptativo-f2}
+\end{table}
+
+\begin{figure}[h!]
+     \centering
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includesvg[width=\textwidth]{figures/Adagrad/learningCurves/curva_aprendizaje_f2_i0.svg}
+         \caption{Iteración 0}
+         \label{fig:learning-adagrad-f2-0}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includesvg[width=\textwidth]{figures/Adagrad/learningCurves/curva_aprendizaje_f2_i18.svg}
+         \caption{Iteración 18}
+         \label{fig:learning-adagrad-f2-18}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includesvg[width=\textwidth]{figures/Adagrad/learningCurves/curva_aprendizaje_f2_i28.svg}
+         \caption{Iteración 28}
+         \label{fig:learning-adagrad-f2-28}
+     \end{subfigure}
+        \caption{Curvas de aprendizaje en la función $f_2$ con el descenso del gradiente adaptativo}
+        \label{fig:learning-curves-adagrad-f2}
+\end{figure}
+
+La figura \ref{fig:learning-curves-adagrad-f2} nos brinda una perspicaz visión del comportamiento de las curvas de aprendizaje en la función $f_2$. En esta función en particular, se observa un patrón recurrente en las curvas de aprendizaje, que revela una estrategia distintiva del algoritmo.
+
+En las primeras etapas de optimización, el algoritmo prioriza la exploración del espacio de parámetros, lo que se manifiesta en un crecimiento inicial de la pérdida. Esta fase de exploración es esencial para descubrir posibles regiones óptimas en el espacio de parámetros y evitar quedarse atrapado en mínimos locales.
+
+Posteriormente, las curvas muestran un cambio de dirección, indicando una transición hacia la explotación de las regiones prometedoras. En esta fase, el algoritmo comienza a ajustar los parámetros de manera más precisa, lo que conduce a una disminución en la pérdida y, en última instancia, a una convergencia hacia un óptimo.
+
+\begin{figure}[h]
+  \centering
+  \includesvg[width=\textwidth]{figures/Adagrad/learningCurves/curva_aprendizaje_f2_i49.svg}  
+  \caption{Curva de aprendizaje $f_2$ (Iteración 49)}
+  \captionsetup{justification=centering}
+  \label{fig:learning-adagrad-f2-49}
+\end{figure}
+
+La figura \ref{fig:learning-adagrad-f2-49} nos revela que el algoritmo logro la  identificación de un punto óptimo altamente efectivo. Este logro se obtiene con los valores presentes en la Tabla \ref{tab:valores-rho-adaptativo}, y podemos apreciarlo claramente en la representación gráfica.
+
+En la figura, notamos un ángulo casi recto en la curva de aprendizaje, lo que indica que el algoritmo ha logrado una convergencia eficaz hacia un mínimo óptimo. Esta convergencia es especialmente significativa, ya que sugiere que el algoritmo ha alcanzado una solución altamente eficiente.
+
+Este ángulo recto es un indicativo de que la pérdida disminuye de manera constante y significativa a medida que avanzan las iteraciones, lo que implica una convergencia rápida hacia un óptimo. El algoritmo ha logrado ajustar los hiperparámetros de manera precisa, lo que se traduce en un rendimiento excepcional.
+\clearpage
+\subsection{Adagrad y Decenso Del Gradiente en puntos sillas}
+
+\textbf{¿Por qué el algoritmo Adagrad es más efectivo en evitar atascarse en
+puntos silla que el algoritmo del descenso del gradiente?}
+\\
+\\
+El algoritmo Adagrad es más efectivo en evitar atascarse en puntos silla en comparación con el algoritmo del descenso del gradiente debido a una característica clave de Adagrad. La adaptación de la tasa de aprendizaje a cada parámetro individual durante el proceso de optimización. Esto proporciona una ventaja significativa en situaciones donde existen puntos silla en la función objetivo.
+
+Adagrad ajusta la tasa de aprendizaje para cada parámetro en función de su historia de gradientes pasados. Esto significa que los parámetros que tienen gradientes grandes recibirán tasas de aprendizaje más pequeñas, lo que permite un refinamiento más cuidadoso en su vecindad.
+
+El algoritmo del descenso del gradiente con una tasa de aprendizaje constante puede tener dificultades en puntos silla porque continuará avanzando incluso cuando el gradiente es pequeño o cercano a cero. Esto puede hacer que el algoritmo quede atrapado en el punto silla sin hacer un progreso significativo. En contraste, Adagrad es más sensible a los gradientes pequeños y disminuirá la tasa de aprendizaje en consecuencia, lo que facilita la salida de puntos silla.
+
+Adagrad se adapta a la topografía de la función objetivo al ajustar las tasas de aprendizaje de manera individual y automática. Esto permite al algoritmo "sentir" la estructura de la función y responder en consecuencia. Cuando se encuentra en un punto silla, Adagrad ajusta las tasas de aprendizaje para permitir una exploración más minuciosa y una posible salida del punto silla.
+
+Como ejemplo ilustrativo de la adaptabilidad del Adagrad podemos observar la Figura \ref{fig:curvas-vanilla} en sus sub figuras, como el algoritmo en su versión más básica sale fuera de la región graficada de la función, no siendo así cuando observamos la Figura \ref{fig:curvas-adagrad} en la cual podemos observar como se mantiene dentro del gráfico y tiende a moverse de una forma más atenuada debido a la adaptabilidad automática del descenso del gradiente adaptativo. 
+
+\newpage
+\subsection{Resultados obtenidos}
+Al terminar todas las ejecuciones se pudo recopilar la siguiente información: De los valores óptimos encontrados \textit{(mínimos)} obtenemos la cantidad de pasos que requirió para converger y el punto donde convergió, así también se toma el número de la iteración donde sucedió. La siguiente tabla muestra los datos obtenidos: \\
+
+\subsubsection{Vanilla}
+
+\begin{table}[h]
+\begin{tabular}{@{}ccccc@{}}
+\toprule
+\textbf{$f_i$} &
+  \textbf{\begin{tabular}[c]{@{}c@{}}Número\\ Iteración\end{tabular}} &
+  \textbf{\begin{tabular}[c]{@{}c@{}}Pasos en\\ converger\end{tabular}} &
+  \textbf{Punto de Convergencia} &
+  \textbf{\begin{tabular}[c]{@{}c@{}}Valor\\ Óptimo\end{tabular}} \\ \midrule
+\textbf{$f_0$} & 0 & 18 & {[}3.309031683e-24, 7.790474755e-24{]} & 0.0000e+00 \\
+\textbf{$f_1$} & 0 & 0  & {[}3.6787831783294, 8.6610193252563{]} & 5.7836e+06 \\
+\textbf{$f_2$} & 0 & 0  & {[}3.6787831783294, 8.6610193252563{]} & 7.7283e+00 \\ \bottomrule
+\end{tabular}
+\caption{Resultados obtenidos de 10 iteraciones del algoritmo.}
+\label{tab:resultados-vanilla}
+\end{table}
+
+Posteriormente se analiza de la muestra de las diez ejecuciones el promedio de los valores óptimos, así como la cantidad promedio de pasos que dura cada algoritmo en converger. La siguiente tabla muestra los datos obtenidos: \\
+
+\begin{table}[h]
+\begin{center}
+    \begin{tabular}{@{}ccc@{}}
+    \toprule
+    \textbf{$f_i$} & \textbf{\begin{tabular}[c]{@{}c@{}}Óptimo\\ Promedio\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Pasos en\\ Promedio\end{tabular}} \\ \midrule
+    \textbf{$f_0$} & 3.549425e+00 & 18.0 \\
+    \textbf{$f_1$} & inf          & 0.0  \\
+    \textbf{$f_2$} & 1.172966e+12 & 0.0  \\ \bottomrule
+    \end{tabular}
+\end{center}
+\caption{Valor óptimo promedio y cantidad promedio de pasos.}
+\label{tab:valores-promedio-vanilla}
+\end{table}
+
+\newpage
+\subsubsection{Adagrad}
+
+\begin{table}[h]
+\begin{tabular}{@{}ccccc@{}}
+\toprule
+\textbf{$f_i$} &
+  \textbf{\begin{tabular}[c]{@{}c@{}}Número\\ Iteración\end{tabular}} &
+  \textbf{\begin{tabular}[c]{@{}c@{}}Pasos en\\ converger\end{tabular}} &
+  \textbf{Punto de Convergencia} &
+  \textbf{\begin{tabular}[c]{@{}c@{}}Valor\\ Óptimo\end{tabular}} \\ \midrule
+\textbf{$f_0$} & 3 & 0 & {[}0.04263520240783, 1.0556936264038{]} & 1.116307 \\
+\textbf{$f_1$} & 9 & 1 & {[}6.22164201736450, 0.8096880912780{]} & 0.197772 \\
+\textbf{$f_2$} & 3 & 0 & {[}0.04263520240783, 1.0556936264038{]} & 0.268635 \\ \bottomrule
+\end{tabular}
+\caption{Resultados obtenidos de 10 iteraciones del algoritmo.}
+\label{tab:resultados-adagrad}
+\end{table}
+
+Posteriormente se analiza de la muestra de las diez ejecuciones el promedio de los valores óptimos, así como la cantidad promedio de pasos que dura cada algoritmo en converger. La siguiente tabla muestra los datos obtenidos: \\
+
+\begin{table}[h]
+\begin{center}
+    \begin{tabular}{@{}ccc@{}}
+    \toprule
+    \textbf{$f_i$} & \textbf{\begin{tabular}[c]{@{}c@{}}Óptimo\\ Promedio\end{tabular}} & \textbf{\begin{tabular}[c] {@{}c@{}}Pasos en\\ Promedio\end{tabular}} \\ \midrule
+    \textbf{$f_0$} & 2.648251e+04 & 0.0 \\
+    \textbf{$f_1$} & 3.325567e+34 & 7.5 \\
+    \textbf{$f_2$} & 1.338127e+31 & 0.0 \\ \bottomrule
+    \end{tabular}
+\end{center}
+\caption{Valor óptimo promedio y cantidad promedio de pasos.}
+\label{tab:valores-promedio-adagrad}
+\end{table}
+
+\newpage
+\subsection{Puntos Visitados}
+
+\subsubsection{Vanilla}
+A continuación se muestran los puntos visitados en las mejores iteraciones del algoritmo del Descenso del Gradiente para las funciones $f_0$, $f_1$, y $f_2$. \\
+
+\begin{figure}[h!]
+     \centering
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includesvg[width=\textwidth]{figures/Vanilla/curvas_vanilla_f0.svg}
+         \caption{Iteración 24}
+         \label{fig:curvas-vanilla-f-24}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includesvg[width=\textwidth]{figures/Vanilla/curvas_vanilla_f1.svg}
+         \caption{Iteración 29}
+         \label{fig:curvas-vanilla-f1}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includesvg[width=\textwidth]{figures/Vanilla/curvas_vanilla_f2.svg}
+         \caption{Iteración 52}
+         \label{fig:curvas-vanilla-f2}
+     \end{subfigure}
+        \caption{Curvas de nivel con los puntos visitados en $f_0$, $f_1$, $f_2$.}
+        \label{fig:curvas-vanilla}
+\end{figure}
+
+\newpage
+\subsubsection{Adagrad}
+A continuación se muestran los puntos visitados en las mejores iteraciones del algoritmo del Descenso del Gradiente Adaptativo para las funciones $f_0$, $f_1$, y $f_2$. \\
+
+\begin{figure}[h!]
+     \centering
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includesvg[width=\textwidth]{figures/Adagrad/curvas_adagrad_f0.svg}
+         \caption{Iteración 24}
+         \label{fig:curvas-adagrad-f0}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includesvg[width=\textwidth]{figures/Adagrad/curvas_adagrad_f1.svg}
+         \caption{Iteración 29}
+         \label{fig:curvas-adagrad-f1}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includesvg[width=\textwidth]{figures/Adagrad/curvas_adagrad_f2.svg}
+         \caption{Iteración 52}
+         \label{fig:curvas-adagrad-f2}
+     \end{subfigure}
+        \caption{Curvas de nivel con los puntos visitados en $f_0$, $f_1$, $f_2$.}
+        \label{fig:curvas-adagrad}
+\end{figure}
+
+\newpage
+\subsection{Análisis comparativo Adagrad y Descenso Del Gradiente}
+El descenso de gradiente, en sus diversas variantes, es el corazón de muchos algoritmos de optimización en el aprendizaje automático y la optimización numérica en general. Dos enfoques ampliamente utilizados son el descenso de gradiente vanilla o básico y el descenso de gradiente adaptativo. A continuación, comparamos estos dos enfoques desde diferentes perspectivas:
+\\
+\textbf{Tasa de aprendizaje:}\\
+\textbf{Vanilla}\\
+En la versión más básica del descenso del gradiente podemos observar que cuenta con una tasa de aprendizaje fija, la cual se mantiene a lo largo de todo el proceso, esta taza de aprendizaje se configura muchas veces de manera empírica, lo que puede causar diversos efectos en el algoritmo. 
+\\
+\textbf{Descenso de Gradiente Adaptativo}\\
+El descenso de gradiente adaptativo ajusta de manera automática la tasa de aprendizaje durante la optimización. Cada uno de los parámetros tiene su propia tasa de aprendizaje, que se adapta según el historial de gradientes que han pasado por ese parámetro, lo que de alguna forma hace que el algoritmo pueda ``sentir'' o ``recordar'' la forma que tiene el terreno a su alrededor, lo que permite una adaptación en tiempo real de los parámetros. 
+\\
+\textbf{Comportamiento en Puntos Silla:}\\
+\textbf{Vanilla}\\
+Puede tener dificultades en puntos silla, ya que sigue avanzando incluso cuando el gradiente es pequeño o cercano a cero. Esto puede llevar a quedar atascado en puntos silla sin hacer un progreso significativo.
+\\
+\textbf{Descenso de Gradiente Adaptativo}\\
+Tiende a lidiar mejor con puntos silla. Ajusta las tasas de aprendizaje para los parámetros individuales, lo que permite una salida más fácil de puntos silla y la convergencia hacia mínimos locales o globales.
+\\
+\textbf{Convergencia y Velocidad:}\\
+\textbf{Vanilla}\\
+Puede converger eficazmente si se selecciona una tasa de aprendizaje adecuada y si la función objetivo es convexa o suave. Sin embargo, puede ser sensible a la elección de la tasa de aprendizaje y puede ser lento en converger en problemas con superficies de pérdida complejas. Un ejemplo de esto se puede ver en las Figuras \ref{fig:learning-vanilla-f0-18} y \ref{fig:learning-vanilla-f2-71} en la primera figura (\ref{fig:learning-vanilla-f0-18}) se puede observar como logra llegar de manera perfecta al punto óptimo, en solo dos pasos, y utilizando 100 iteraciones del framework optuna para calibrar el hiperparámetro $\alpha$, pero sí vemos la segunda figura (\ref{fig:learning-vanilla-f2-71}) nos damos cuenta de que a pesar de realizar la calibración pertinente para la función $f_2$ le cuesta un poco más llegar a ese óptimo, y esto se ve por la forma que existe en la curva de aprendizaje. 
+\\
+\textbf{Descenso de Gradiente Adaptativo}\\
+Tiende a converger más rápido en problemas con superficies de pérdida irregulares o no convexas. La adaptación automática de la tasa de aprendizaje permite una convergencia eficiente. Esto lo podemos ver reflejado en las Figuras \ref{fig:learning-adagrad-f2-49} y \ref{fig:learning-adagrad-f0-91} donde en comparación con la versión básica el algoritmo Adargad en ambas ocasiones, con 100 iteraciones del framework optuna para calibrar su hiperparámetro, $\rho$ logra llegar al punto óptimo de forma más rápida. 
+\\
+\textbf{Recomendada para funciones:}\\
+\textbf{Vanilla}\\
+Adecuado para problemas simples y suaves
+\\
+\textbf{Descenso de Gradiente Adaptativo}\\
+Efectivo en problemas complejos y con superficies de pérdida irregulares

@@ -1,0 +1,141 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{setspace}
+\usepackage{svg}
+\usepackage{caption}
+\usepackage{subcaption} 
+\usepackage{overpic}
+\usepackage{tikz}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{{booktabs}}
+\usepackage{apacite}
+\usepackage{float}
+
+\hypersetup{
+    colorlinks=true,     
+    linkcolor=blue,     
+    urlcolor=blue,     
+    citecolor=blue      
+}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
+
+
+
+\usepackage[spanish]{babel}
+
+% Add Latex Modules inside the brackets
+\includeonly{curves, NewthonRaphson, AdaGrad, SimulatedAnnealing}
+
+\begin{document}
+
+\begin{doublespace}
+\begin{center}
+\Large{\textbf{Instituto Tecnológico de Costa Rica}}
+\bigskip\par\end{center}
+
+\begin{center}
+Área Académica de Ingeniería en Computación.\\
+Programa de Bachillerato en Ingeniería en Computación
+\bigskip\par\end{center}
+
+\begin{center}
+IC6400 - Investigación de Operaciones \\
+Trabajo Práctico 02: Optimización\\ 
+Profesor: Ph. D. Saúl Calderón Ramírez 
+\par\end{center}
+\end{doublespace}
+
+\begin{doublespace}
+\begin{center}
+\bigskip{}
+\par\end{center}
+\end{doublespace}
+
+\begin{center}
+\textbf{Estudiantes} \bigskip{} \\
+\begin{table}[h]
+\begin{center}
+    \begin{tabular}{@{}lc@{}}
+    Brandon Retana Chacón      & 2021121141 \\
+    Ervin Rodríguez Villanueva & 2021095970 \\
+    Josué Castro Ramírez       & 2020065036
+    \end{tabular}
+\end{center}
+\end{table}
+\vfill{}
+\par\end{center}
+
+\begin{center}
+Segundo semestre 2023\newpage{}
+\par\end{center}
+
+\tableofcontents
+\newpage
+
+% Include de file in document body
+\include{curves}
+\include{NewthonRaphson}
+\input{AdaGrad}
+\include{SimulatedAnnealing}
+
+\section{Comparación de todos los algoritmos}
+
+En el campo de la optimización, la selección del algoritmo adecuado desempeña un papel crucial en el logro de resultados óptimos. En esta comparativa, exploraremos y analizaremos cuatro algoritmos ampliamente utilizados: Simulated Annealing, Descenso de Gradiente Vanilla, Adagrad y el método de Newton-Raphson. Cada uno de estos enfoques tiene sus propias características, ventajas y desventajas, lo que hace que sean idóneos para diferentes tipos de problemas y situaciones. En esta comparativa, examinaremos el rendimiento de estos algoritmos en diversas funciones definidas previamente como $f_0$, $f_1$ y $f_2$, lo que nos permitirá comprender mejor cómo se comparan en términos de eficiencia y eficacia. Esta comparativa arrojará luz sobre las fortalezas y debilidades de cada enfoque, proporcionando información valiosa para la elección adecuada de algoritmos en aplicaciones del mundo real.
+
+Cuando evaluamos la velocidad con la que estos algoritmos alcanzan una solución, es esencial analizar detenidamente las tablas de resultados correspondientes a los algoritmos: Newton-Raphson, Descenso de Gradiente Vanilla, Adagrad y Simulated Annealing, identificadas como \ref{tab:resultados-newton}, \ref{tab:resultados-vanilla}, \ref{tab:resultados-adagrad} y \ref{tab:resultados-simul}, respectivamente.
+
+Observamos que Adagrad se destaca como el algoritmo más veloz para llegar a una solución en la mayoría de los casos. Esto se debe a su capacidad para adaptarse eficazmente a la topografía de la función, como lo menciona \citeA{ruder2016overview},``su capacidad para adaptar la tasa de aprendizaje a los parámetros del modelo. Como indica Ruder, Adagrad realiza actualizaciones más grandes para los parámetros menos frecuentes y actualizaciones más pequeñas para los parámetros más frecuentes.''
+Lo que hace que el algoritmo logre actualizar los movimientos de manera más inteligente. 
+
+En contraste, Simulated Annealing se revela como el algoritmo más lento, ya que generalmente requiere un número significativamente mayor de iteraciones, que oscilan entre 16 y 17, para alcanzar la convergencia. La razón detrás de esta diferencia radica en el enfoque fundamental de Simulated Annealing. Este algoritmo se basa en la exploración probabilística de la función objetivo, lo que implica visitar puntos aleatorios en la función y moverse de manera más errática por su superficie, lo que puede llegar a ser muy beneficioso si se tiene una función compleja, no diferenciable o caótica como lo indica \citeA{cai2021sa}`` Con la capacidad de montar colinas, se supone que el modelo salta de estas áreas locales intratables y converge a un estado óptimo.'' Aunque esto puede tener un costo y puede llevar más tiempo para encontrar una solución óptima, como lo menciona \citeA{busetti2003simulated} ``Existe un claro equilibrio entre la calidad de las soluciones y el tiempo necesario para calcularlas.'' Esta desventaja es una de las principales para tomar en cuenta a la hora de escoger este algoritmo en modelos muy grandes como en las redes neuronales, este puede ser una mala opción si buscamos un optimizador que sea eficiente a nivel de tiempo computacional. 
+
+Las formas de movimiento anteriormente descritas también la podemos observar en las figuras \ref{fig:curvas-adagrad} y \ref{fig:curvas-simul} donde podemos los diferentes movimientos dentro de las figuras, y aunque el Adagrad se mueva de manera lenta, puede llegar ser extremadamente lenta y que el proceso de optimizado sea lento, según \cite{ruder2016overview}, ``Adagrad puede experimentar una ralentización en la tasa de aprendizaje durante el entrenamiento.'' lo que es una razón de peso a la hora de escoger este algoritmo. 
+
+Si nos adentramos en el análisis de los algoritmos intermedios, encontramos que, aunque no sean los más rápidos en alcanzar la convergencia, poseen propiedades interesantes que merecen nuestra atención. Estas propiedades se hacen evidentes al examinar las curvas de aprendizaje presentadas en las figuras representadas en \ref{fig:learning-curves-f1-newton}, las cuales revelan que la forma en que el algoritmo Newton-Raphson converge es distintas funciones, es más estable en comparación con el algoritmo de Descenso de Gradiente Vanilla, como se ilustra en la figura \ref{fig:learning-curves-f1}, donde la convergencia tiene una forma lineal.
+
+Esta estabilidad es una de las principales ventajas de estos algoritmos, tal como se menciona en \citeA{akram2015newton}, donde se destaca que ``este método es ampliamente conocido por su rápida velocidad de convergencia y por mejorar la propiedad de convergencia.'' Sin embargo, es importante señalar que en ciertos casos, como el que involucra la función $f_1$, este algoritmo presenta un comportamiento peculiar que no siempre es beneficioso. Este fenómeno se puede apreciar en la figura \ref{fig:curvas-newton-f2-52}, donde el algoritmo llega a un punto completamente distante, incluso fuera del intervalo en el que se graficaron las curvas de nivel.
+
+Este comportamiento, que implica que los puntos no caigan dentro de las áreas sombreadas de las curvas de nivel representadas, también se hace evidente en la Figura \ref{fig:curvas-vanilla}, donde dos de las sub figuras están mayoritariamente en blanco. Esta observación se debe a una limitación del algoritmo de Descenso de Gradiente en su forma más básica, como lo señala \citeA{ibm-gradient-descent} ``En problemas convexos, donde la función de pérdida tiene una única solución óptima, el Descenso de Gradiente suele funcionar eficazmente y puede encontrar el mínimo global con relativa facilidad. No obstante, en problemas no convexos, caracterizados por funciones de pérdida que pueden tener múltiples mínimos locales, el Descenso de Gradiente puede enfrentar desafíos significativos al intentar encontrar el mínimo global''. Esto se refleja en la dificultad que encuentra el algoritmo en abordar estas situaciones y su tendencia a quedar atrapado en mínimos locales en lugar de alcanzar la solución óptima global. 
+
+De manera similar, el desempeño de este algoritmo se destaca en la optimización de funciones que no sean especialmente complejas, como se ilustra en la Figura \ref{fig:curvas-vanilla-f-24}. En casos donde la función a optimizar es relativamente sencilla, el algoritmo demuestra su eficacia, como menciona \citeA{donges-2021}, quien señala que "este enfoque es capaz de generar un gradiente de error estable y una convergencia igualmente estable." Además, su comprensión y aplicación resultan bastante accesibles, lo que facilita su implementación en diversas situaciones.
+
+En conclusión, esta comparativa detallada de cuatro algoritmos de optimización clave, Simulated Annealing, Descenso de Gradiente Vanilla, Adagrad y el método de Newton-Raphson, ha proporcionado una visión integral de sus fortalezas y limitaciones en una variedad de contextos. La elección del algoritmo adecuado debe basarse en la naturaleza del problema y en los objetivos específicos. Adagrad se destaca por su rapidez y adaptabilidad en funciones bien comportadas, mientras que Simulated Annealing brilla en la exploración de soluciones en problemas complejos y no lineales, a pesar de su relativa lentitud.
+
+Los algoritmos intermedios, como el método de Newton-Raphson, ofrecen estabilidad en la convergencia en la mayoría de los casos, pero pueden mostrar comportamientos inusuales en situaciones particulares. El Descenso de Gradiente Vanilla, aunque eficiente en funciones simples y convexas, puede enfrentar dificultades en problemas no convexos con múltiples mínimos locales.
+
+En última instancia, esta comparativa subraya la importancia de comprender las características intrínsecas de cada algoritmo y su idoneidad para un contexto particular. La selección adecuada del algoritmo puede marcar la diferencia en la eficiencia y efectividad de la optimización en aplicaciones del mundo real. Este análisis proporciona un recurso valioso para los profesionales que buscan abordar una amplia gama de problemas de optimización con mayor conocimiento y precisión. 
+
+\newpage
+\bibliographystyle{apacite}
+\bibliography{referencias}
+
+\end{document}

@@ -1,0 +1,278 @@
+\section{Algoritmo Newton Rhapson}
+
+\subsection{Gráficas de calibración de Optuna} 
+
+Para calibrar los híper-parámetros del algoritmo Newton Rhapson se ha implementado un estudio utilizando correspondiente en el framework Optuna. En este estudio, se evalúan diferentes valores de $\alpha$ que se encuentran en el intervalo de $0.01 < \alpha < 3$ para las funciones $f_0$, $f_1$ y $f_2$. Se busca determinar diferentes valores óptimos de $\alpha$ que permitirán al algoritmo converger de una manera más rápida en su respectiva función a evaluar. \\
+
+\begin{table}[H]
+    \centering
+    \caption{Mejores valores de $\alpha$ para las funciones}
+    \begin{tabular}{|c|c|c|}
+    \hline
+    \textbf{Función} & \textbf{Intervalo de $\alpha$} \\
+    \hline
+    $f_0$ & $\alpha = 0.9870813675771739$ \\
+    \hline
+    $f_1$ & $\alpha = 1.4006331054549697$ \\
+    \hline
+    $f_2$ & $\alpha = 1.017869214248408$ \\
+    \hline
+    \end{tabular}
+    \label{tab:valores-alpha-simul_f0}
+\end{table}
+
+La tabla anterior muestra los mejores hiperparametros seleccionados por optuna luego de realizar un análisis de 100 iteraciones donde se probaron distintos valores para cada una de las funciones, a continuación se muestran las gráficas de aprendizaje para cada una de las funciones aplicando este algoritmo y su respectiva combinación de parámetros.
+
+\begin{table}[H]
+    \centering
+    \caption{Valores de $\alpha$ para cada iteración en $f_0$}
+    \begin{tabular}{|c|c|c|}
+    \hline
+    \textbf{Subfigura} & \textbf{Valor de $\alpha$ obtenido} \\
+    \hline
+    $a$ & $0.9609498132547092$ \\
+    \hline
+    $b$ & $0.678573801276111$ \\
+    \hline
+    $c$ & $2.8100013329038465$ \\
+    \hline
+    \end{tabular}
+    \label{tab:values_f0_newton}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \caption{Resultados obtenidos en cada iteración de $f_0$}
+    \begin{tabular}{|c|c|c|}
+    \hline
+    \textbf{Subfigura} & \textbf{Valor de $\alpha$ obtenido} \\
+    \hline
+    $a$ & $ 0.0$ \\
+    \hline
+    $b$ & $2.0009538902465107e-23$ \\
+    \hline
+    $c$ & $677825229094912.0$ \\
+    \hline
+    \end{tabular}
+    \label{tab:values_f0_newton}
+\end{table}
+
+\begin{figure}[H]
+     \centering
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includesvg[width=\textwidth]{figures/Newton/learningCurves/curva_aprendizaje_f0_i3.svg}
+         \caption{Iteración 3}
+         \label{fig:Newton-Rhapson-f0-3}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includesvg[width=\textwidth]{figures/Newton/learningCurves/curva_aprendizaje_f0_i27.svg}
+         \caption{Iteración 27}
+         \label{fig:Newton-Rhapson-f0-27}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includesvg[width=\textwidth]{figures/Newton/learningCurves/curva_aprendizaje_f0_i1.svg}
+         \caption{Iteración 1}
+         \label{fig:Newton-Rhapson-f0-1}
+     \end{subfigure}
+        \caption{Curvas de aprendizaje en la función $f_0$ con Newton Rhapson}
+        \label{fig:learning-curves-f0}
+\end{figure}
+
+Luego de evaluar los resultados obtenidos y el comportamiento de la función de aprendizaje de los distintos valores para $\alpha$ se logra observar que este algoritmo converge de manera muy rápida y hasta donde se logra observar para esta primera función los $\alpha$ pequeños contribuyen a obtener valores pequeños en los resultados de Optuna.
+
+\begin{table}[H]
+    \centering
+    \caption{ Valores de $\alpha$ para cada iteración en $f_1$}
+    \begin{tabular}{|c|c|c|}
+    \hline
+    \textbf{Subfigura} & \textbf{Valor de $\alpha$ obtenido} \\
+    \hline
+    $a$ & $2.359428450538155$ \\
+    \hline
+    $b$ & $2.215599854888737$ \\
+    \hline
+    $c$ & $2.059947470306036$ \\
+    \hline
+    \end{tabular}
+    \label{tab:values_f0_newton}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \caption{Resultados obtenidos en cada iteración de $f_1$}
+    \begin{tabular}{|c|c|c|}
+    \hline
+    \textbf{Subfigura} & \textbf{Valor de $\alpha$ obtenido} \\
+    \hline
+    $a$ & $ 2.418576955795288$ \\
+    \hline
+    $b$ & $ 15.741938591003418$ \\
+    \hline
+    $c$ & $507945472.0$ \\
+    \hline
+    \end{tabular}
+    \label{tab:values_f0_newton}
+\end{table}
+
+\begin{figure}[H]
+     \centering
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includesvg[width=\textwidth]{figures/Newton/learningCurves/curva_aprendizaje_f1_i63.svg}
+         \caption{Iteración 63}
+         \label{fig:Newton-Rhapson-f0-63}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includesvg[width=\textwidth]{figures/Newton/learningCurves/curva_aprendizaje_f1_i32.svg}
+         \caption{Iteración 32}
+         \label{fig:Newton-Rhapson-f0-32}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includesvg[width=\textwidth]{figures/Newton/learningCurves/curva_aprendizaje_f1_i29.svg}
+         \caption{Iteración 29}
+         \label{fig:Newton-Rhapson-f1-29}
+     \end{subfigure}
+        \caption{Curvas de aprendizaje en la función $f_1$ con Newton Rhapson}
+        \label{fig:learning-curves-f1-newton}
+\end{figure}
+
+
+Al igual que la evaluación en $f0$ anterior, estas gráficas demuestran la rápida convergencia del algoritmo Newton Rhapson sin importar el valor de $\alpha$ que se seleccione, las 3 gráficas ejemplifican una rápida convergencia a un valor óptimo
+
+\begin{table}[H]
+    \centering
+    \caption{Valores de $\alpha$ para cada iteración en $f_2$}
+    \begin{tabular}{|c|c|c|}
+    \hline
+    \textbf{Subfigura} & \textbf{Valor de $\alpha$ obtenido} \\
+    \hline
+    $a$ & $1.0414228601636484$ \\
+    \hline
+    $b$ & $2.000062008785881$ \\
+    \hline
+    $c$ & $2.7938342743454014$ \\
+    \hline
+    \end{tabular}
+    \label{tab:values_f2_newton}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \caption{Resultados obtenidos en cada iteración de $f_2x$}
+    \begin{tabular}{|c|c|c|}
+    \hline
+    \textbf{Subfigura} & \textbf{Valor de $\alpha$ obtenido} \\
+    \hline
+    $a$ & $ 0.0$ \\
+    \hline
+    $b$ & $ 7.752358436584473$ \\
+    \hline
+    $c$ & $ 37774841348096.0$ \\
+    \hline
+    \end{tabular}
+    \label{tab:values_f2_newton}
+\end{table}
+
+\begin{figure}[H]
+     \centering
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includesvg[width=\textwidth]{figures/Newton/learningCurves/curva_aprendizaje_f2_i15.svg}
+         \caption{Iteración 15}
+         \label{fig:Newton-Rhapson-f2-63}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includesvg[width=\textwidth]{figures/Newton/learningCurves/curva_aprendizaje_f2_i39.svg}
+         \caption{Iteración 39}
+         \label{fig:Newton-Rhapson-f2-32}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includesvg[width=\textwidth]{figures/Newton/learningCurves/curva_aprendizaje_f3_i8.svg}
+         \caption{Iteración 8}
+         \label{fig:Newton-Rhapson-f2-29}
+     \end{subfigure}
+        \caption{Curvas de aprendizaje en la función $f_2$ con Newton Rhapson}
+        \label{fig:learning-curves-f2}
+\end{figure}
+
+Finalmente, estos resultados demuestran que al usar el algoritmo Newton Rhapson con valores de $\alpha$ pequeños para la función $f_2$ se obtienen mejores resultado al evaluar el valor de perdida que tiene el algoritmo con las diversas funciones, por otra parte si usamos valores altos obtenemos resultados que crecen demasiado, sin embargo, al igual que con las otras 3 funciones vemos la rápida convergencia de este algoritmo.
+
+\newpage
+\subsection{Resultados obtenidos}
+Al terminar todas las ejecuciones se pudo recopilar la siguiente información: De los valores óptimos encontrados \textit{(mínimos)} obtenemos la cantidad de pasos que requirió para converger y el punto donde convergió, así también se toma el número de la iteración donde sucedió. La siguiente tabla muestra los datos obtenidos: \\
+
+\begin{table}[H]
+\begin{tabular}{@{}ccccc@{}}
+\toprule
+\textbf{$f_i$} &
+  \textbf{\begin{tabular}[c]{@{}c@{}}Número\\ Iteración\end{tabular}} &
+  \textbf{\begin{tabular}[c]{@{}c@{}}Pasos en\\ converger\end{tabular}} &
+  \textbf{Punto de Convergencia} &
+  \textbf{\begin{tabular}[c]{@{}c@{}}Valor\\ Óptimo\end{tabular}} \\ \midrule
+\textbf{$f_0$} & 3 & 12 & {[}9.212443861e-25, 2.281108058e-23{]} & 0.000000  \\
+\textbf{$f_1$} & 1 & 9  & {[}0.0014489889144, 0.9999685883522{]} & 14.203123 \\
+\textbf{$f_2$} & 3 & 0  & {[}0.0426352024078, 1.0556936264038{]} & 0.268635  \\ \bottomrule
+\end{tabular}
+\caption{Resultados obtenidos de 10 iteraciones del algoritmo.}
+\label{tab:resultados-newton}
+\end{table}
+
+Posteriormente se analiza de la muestra de las diez ejecuciones el promedio de los valores óptimos, así como la cantidad promedio de pasos que dura cada algoritmo en converger. La siguiente tabla muestra los datos obtenidos: \\
+
+\begin{table}[h]
+\begin{center}
+    \begin{tabular}{@{}ccc@{}}
+    \toprule
+    \textbf{$f_i$} & \textbf{\begin{tabular}[c]{@{}c@{}}Óptimo\\ Promedio\end{tabular}} &    \textbf{\begin{tabular}[c]{@{}c@{}}Pasos en\\ Promedio\end{tabular}} \\ \midrule
+    \textbf{$f_0$} & 2.363118e+00 & 12.9 \\
+    \textbf{$f_1$} & 1.145430e+05 & 10.1 \\
+    \textbf{$f_2$} & 1.216903e+23 & 0.0  \\ \bottomrule
+    \end{tabular}
+\end{center}
+\caption{Valor óptimo promedio y cantidad promedio de pasos.}
+\label{tab:valores-promedio-newton}
+\end{table}
+
+\newpage
+\subsection{Puntos Visitados}
+
+A continuación se muestran los puntos visitados en las mejores iteraciones del algoritmo Newton Rhapson para las funciones $f_0$, $f_1$, y $f_2$. \\
+
+\begin{figure}[h]
+     \centering
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includesvg[width=\textwidth]{figures/Newton/curvas_newton_f0.svg}
+         \caption{Iteración 24}
+         \label{fig:curvas-newton-f0}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includesvg[width=\textwidth]{figures/Newton/curvas_newton_f1.svg}
+         \caption{Iteración 29}
+         \label{fig:curvas-newton-f1}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.45\textwidth}
+         \centering
+         \includesvg[width=\textwidth]{figures/Newton/curvas_newton_f2.svg}
+         \caption{Iteración 52}
+         \label{fig:curvas-newton-f2-52}
+     \end{subfigure}
+        \caption{Curvas de nivel con los puntos visitados en $f_0$, $f_1$, $f_2$.}
+        \label{fig:curvas-newton}
+\end{figure}
